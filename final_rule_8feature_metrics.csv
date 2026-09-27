@@ -1,0 +1,2 @@
+﻿model,n_features,roc_auc,ap,top70_insider,precision_at_70,recall_at_70
+final_rule_8feature,8,0.9622844827586206,0.7403984463401924,41,0.5857142857142857,0.5857142857142857
