@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent
 USER_PATH = BASE_DIR / "final_user_risk_score_8feature.csv"
 DAILY_PATH = BASE_DIR / "final_daily_risk_score_8feature.csv"
 METRICS_PATH = BASE_DIR / "final_rule_8feature_metrics.csv"
-BASELINE_PATH = BASE_DIR / "feature_baseline_calendar.csv"
+BASELINE_PATH = BASE_DIR / "feature_baseline_raw_active.csv"
 
 # 개발 저장소에서는 원본 분석 폴더를 fallback으로 사용합니다. 배포 시에는
 # 위 CSV를 이 앱과 같은 06_대시보드 폴더에 복사하면 됩니다.
@@ -286,16 +286,16 @@ FEATURE_COLS = {
 }
 
 BASELINE_COLS = {
-    "After-hours Logon": ("after_hours_logon_count", "after_hours_logon_count_mean_28cal"),
-    "Device Connect": ("device_connect_count", "device_connect_count_mean_28cal"),
-    "File Activity": ("file_event_count", "file_event_count_mean_28cal"),
+    "After-hours Logon": ("after_hours_logon_count", "after_hours_logon_count_mean_28raw"),
+    "Device Connect": ("device_connect_count", "device_connect_count_mean_28raw"),
+    "File Activity": ("file_event_count", "file_event_count_mean_28raw"),
     "Suspicious HTTP Keyword": (
         "suspicious_http_keyword_count",
-        "suspicious_http_keyword_count_mean_28cal",
+        "suspicious_http_keyword_count_mean_28raw",
     ),
-    "Email Count": ("email_count", "email_count_mean_28cal"),
-    "Email Total Size": ("email_total_size", "email_total_size_mean_28cal"),
-    "Attachment Count": ("attachment_count", "attachment_count_mean_28cal"),
+    "Email Count": ("email_count", "email_count_mean_28raw"),
+    "Email Total Size": ("email_total_size", "email_total_size_mean_28raw"),
+    "Attachment Count": ("attachment_count", "attachment_count_mean_28raw"),
 }
 
 METRIC_INFO = {
@@ -630,14 +630,14 @@ with tab_all:
     with explain_right:
         st.markdown('<div class="section-title">현재값 vs 개인 baseline</div>', unsafe_allow_html=True)
         st.markdown(
-            '<div class="section-sub">최대 위험일 현재값과 이전 28 calendar-day 개인 평균을 비교합니다.</div>',
+            '<div class="section-sub">최대 위험일 현재값과 이전 28개 활성 원시 관측치 기반 개인 평균을 비교합니다.</div>',
             unsafe_allow_html=True,
         )
 
         baseline_row = baseline_df.loc[
             (baseline_df["user"] == selected_user)
             & (baseline_df["day"] == selected_user_row["max_risk_day"])
-            & (baseline_df["baseline_valid_28cal"] == 1)
+            & (baseline_df["baseline_valid_28raw"] == 1)
         ]
 
         if baseline_row.empty:
